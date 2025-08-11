@@ -10,11 +10,23 @@ class ProductoController extends Controller
     /**
      * Mostrar listado de productos
      */
-    public function index()
-    {
-         $productos = Producto::paginate(5); // 10 productos por página
-            return view('productos.index', compact('productos'));
+    public function index(Request $request)
 
+    {
+        // Tomar el texto que viene del buscador
+        $search = $request->input('search');
+
+    // Consulta con filtro si hay búsqueda
+         $productos = Producto::when($search, function ($query, $search) {
+            $query->where('nombre', 'like', "%{$search}%")
+            ->orWhere('unidad_medida', 'like', "%{$search}%");
+            })
+            ->orderBy('id', 'asc')
+            ->paginate(5)
+            ->appends($request->only('search')); // Mantiene el texto al cambiar de página
+
+    // Retornar vista con los productos (no es necesario pasar $search gracias a request('search'))
+        return view('productos.index', compact('productos'));
     }
 
     /**
@@ -33,7 +45,7 @@ class ProductoController extends Controller
         $request->validate([
             'nombre'         => 'required|string|max:255', // Validar como string con longitud máxima
             'cantidad'       => 'required|integer|min:0', // Validar como entero no negativo
-            'unidad_medida' => 'required|string|in:kg,lt,pz,quintal,arroba', // Validar como string con valores específicos
+            'unidad_medida' => 'required|string|in:kg,lt,pz,quintal,arroba,unidad,libra', // Validar como string con valores específicos
             'precio'         => 'required|numeric|min:0', // Validar como numérico no negativo
             'precio_unitario'=> 'nullable|numeric|min:0',// Validar como numérico no negativo
             'precio_mayoreo' => 'nullable|numeric|min:0',// Validar como numérico no negativo

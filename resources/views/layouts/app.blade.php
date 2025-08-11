@@ -27,12 +27,44 @@
     </style>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ route('productos.index') }}">Inventario</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<div class="centered-container">
-    <div class="content-wrapper">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Menú -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('productos.create') }}">Nuevo Producto</a>
+                </li>
+            </ul>
+
+            <!-- Barra de búsqueda -->
+             @hasSection('search')
+                @yield('search')
+            @endif
+        </div>
+    </div>
+</nav>
+
+@if(View::getSection('fullwidth'))
+    {{-- Modo pantalla completa --}}
+    <div class="container-fluid">
         @yield('content')
     </div>
-</div>
-
+@else
+    {{-- Modo centrado (formularios, etc.) --}}
+    <div class="centered-container">
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
+    </div>
+@endif
 </body>
 </html>
