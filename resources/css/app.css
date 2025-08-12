@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "bootstrap/dist/css/bootstrap.min.css";
+/* Bootstrap y Bootstrap Icons */
+@import "bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-/* variables definidad por el usuario: */
+/* Variables personalizadas */
 :root {
   --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
 }
-

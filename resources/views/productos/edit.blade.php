@@ -42,8 +42,8 @@
     </div>
 
     <div class="mb-3">
-        <label for="precio" class="form-label">Precio:</label>
-        <input type="text" id="precio" name="precio" class="form-control" value="{{ old('precio', $producto->precio) }}" required>
+        <label for="precio_total" class="form-label">precio_total:</label>
+        <input type="text" id="precio_total" name="precio_total" class="form-control" value="{{ old('precio_total', $producto->precio_total) }}" required>
     </div>
 
     <div class="mb-3">

@@ -13,7 +13,7 @@
 
     <div class="mb-3 text-center">
         <p><strong>Cantidad:</strong> {{ $producto->cantidad }}</p>
-        <p><strong>Precio:</strong> ${{ number_format($producto->precio, 2) }}</p>
+        <p><strong>precio_total:</strong> ${{ number_format($producto->precio_total, 2) }}</p>
     </div>
 
     <div class="d-flex justify-content-center gap-3">

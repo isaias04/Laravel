@@ -13,7 +13,7 @@ class Producto extends Model
         'nombre',
         'cantidad',
         'unidad_medida',
-        'precio',
+        'precio_total',
         'precio_unitario',
         'precio_mayoreo',
         'imagen',

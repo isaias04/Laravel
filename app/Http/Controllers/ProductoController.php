@@ -7,27 +7,38 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Mostrar listado de productos
      */
     public function index(Request $request)
+{
+    // Mostrar mensaje de bienvenida solo una vez
+    $mostrarBienvenida = false;
+    if (!session()->has('bienvenida_mostrada')) {
+        session()->put('bienvenida_mostrada', true);
+        $mostrarBienvenida = true;
+    }
 
-    {
-        // Tomar el texto que viene del buscador
-        $search = $request->input('search');
+    // Tomar el texto que viene del buscador
+    $search = $request->input('search');
 
     // Consulta con filtro si hay búsqueda
-         $productos = Producto::when($search, function ($query, $search) {
-            $query->where('nombre', 'like', "%{$search}%")
-            ->orWhere('unidad_medida', 'like', "%{$search}%");
-            })
-            ->orderBy('id', 'asc')
-            ->paginate(5)
-            ->appends($request->only('search')); // Mantiene el texto al cambiar de página
+    $productos = Producto::when($search, function ($query, $search) {
+        $query->where('nombre', 'like', "%{$search}%")
+              ->orWhere('unidad_medida', 'like', "%{$search}%");
+    })
+    ->orderBy('id', 'asc')
+    ->paginate(5)
+    ->appends($request->only('search')); // Mantiene el texto al cambiar de página
 
-    // Retornar vista con los productos (no es necesario pasar $search gracias a request('search'))
-        return view('productos.index', compact('productos'));
-    }
+    // Retornar vista con los productos y si se debe mostrar el saludo
+    return view('productos.index', compact('productos', 'mostrarBienvenida'));
+}
 
     /**
      * Mostrar formulario de creación
@@ -46,7 +57,7 @@ class ProductoController extends Controller
             'nombre'         => 'required|string|max:255', // Validar como string con longitud máxima
             'cantidad'       => 'required|integer|min:0', // Validar como entero no negativo
             'unidad_medida' => 'required|string|in:kg,lt,pz,quintal,arroba,unidad,libra', // Validar como string con valores específicos
-            'precio'         => 'required|numeric|min:0', // Validar como numérico no negativo
+            'precio_total'         => 'required|numeric|min:0', // Validar como numérico no negativo
             'precio_unitario'=> 'nullable|numeric|min:0',// Validar como numérico no negativo
             'precio_mayoreo' => 'nullable|numeric|min:0',// Validar como numérico no negativo
             'imagen'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -56,7 +67,7 @@ class ProductoController extends Controller
         $producto->nombre          = $request->nombre;
         $producto->cantidad        = $request->cantidad;
         $producto->unidad_medida   = $request->unidad_medida;
-        $producto->precio          = $request->precio;
+        $producto->precio_total          = $request->precio_total; // Cambiado a precio_total
         $producto->precio_unitario = $request->precio_unitario;
         $producto->precio_mayoreo  = $request->precio_mayoreo;
 
@@ -99,7 +110,7 @@ class ProductoController extends Controller
             'nombre'         => 'required|string|max:255',
             'cantidad'       => 'required|integer|min:0',
             'unidad_medida'  => 'required|string|in:unidad,kg,litro,metro',
-            'precio'         => 'required|numeric|min:0',
+            'precio_total'         => 'required|numeric|min:0',
             'precio_unitario'=> 'nullable|numeric|min:0',
             'precio_mayoreo' => 'nullable|numeric|min:0',
             'imagen'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -109,7 +120,7 @@ class ProductoController extends Controller
         $producto->nombre          = $request->nombre;
         $producto->cantidad        = $request->cantidad;
         $producto->unidad_medida   = $request->unidad_medida;
-        $producto->precio          = $request->precio;
+        $producto->precio_total    = $request->precio_total; // Cambiado a precio_total
         $producto->precio_unitario = $request->precio_unitario;
         $producto->precio_mayoreo  = $request->precio_mayoreo;
 
